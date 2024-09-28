@@ -71,14 +71,16 @@ router.post("/verify", async (req, res) => {
           cointrust: cointrust,
           trustScore: trustScore,
         });
-        res.render("result", { username, trustScore, cointrust });
+        return res.render("result", { username, cointrust });
       } else {
-        res.render("error", {
+        return res.render("error", {
           message: `Описание вашего профиля не содержит слово "${verificationWord}".`,
         });
       }
     } else {
-      res.render("error", { message: "Не удалось найти профиль TikTok." });
+      return res.render("error", {
+        message: "Не удалось найти профиль TikTok.",
+      });
     }
   } catch (error) {
     console.error(error);
