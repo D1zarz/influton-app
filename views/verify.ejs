@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Верификация TikTok</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Roboto", sans-serif;
+        text-align: center;
+        overflow: hidden; /* Запретить прокрутку */
+        background: #1a1a2e; /* Основной цвет фона */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.1),
+          rgba(0, 0, 0, 0.8)
+        );
+        animation: move 10s infinite linear; /* Анимация фона */
+        z-index: -1;
+      }
+
+      @keyframes move {
+        0% {
+          background-position: 0% 0%;
+        }
+        100% {
+          background-position: 100% 100%;
+        }
+      }
+
+      h1 {
+        font-size: 24px;
+        margin: 20px 0;
+        color: #ffffff; /* Цвет заголовка */
+        opacity: 0;
+        transform: translateY(-30px);
+        animation: fadeIn 0.8s forwards; /* Анимация появления */
+      }
+
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .button {
+        background: linear-gradient(to right, #ff4081, #00b0ff);
+        color: white;
+        padding: 15px 30px;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        font-size: 20px;
+        margin: 20px 0;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Тень */
+        animation: pulse 1s infinite; /* Анимация пульсации */
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+
+      .button:hover {
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+      }
+
+      .button:active {
+        transform: scale(0.95);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      }
+
+      input[type="text"] {
+        width: 80%;
+        height: 45px;
+        border: 2px solid #333; /* Тёмная рамка */
+        border-radius: 5px;
+        padding: 0 10px;
+        font-size: 16px;
+        margin: 10px 0;
+        background-color: #f5f5f5;
+        transition: border-color 0.3s;
+        color: #333; /* Цвет текста поля ввода */
+      }
+
+      input[type="text"]:focus {
+        border-color: #ff4081; /* Цвет рамки при фокусе */
+        outline: none;
+        box-shadow: 0 0 5px rgba(255, 64, 129, 0.5); /* Лёгкая тень при фокусе */
+      }
+
+      /* Стиль формы */
+      form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .error {
+        color: #ff004d;
+        margin-bottom: 10px;
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="background"></div>
+    <div>
+      <h1>
+        Введите свой TikTok аккаунт<br />и убедитесь, что в описании есть
+        <span style="color: #ff007a">INFLUSTAR</span>!
+      </h1>
+      <form id="verifyForm" action="/verify" method="POST">
+        <div id="errorMessage" class="error"></div>
+        <input
+          type="text"
+          id="username"
+          name="username"
+          placeholder="TikTok username"
+          required
+        />
+        <button class="button" type="submit">Проверить</button>
+      </form>
+    </div>
+
+    <script>
+      document
+        .getElementById("verifyForm")
+        .addEventListener("submit", function (event) {
+          const usernameInput = document.getElementById("username");
+          const errorMessage = document.getElementById("errorMessage");
+
+          const usernameRegex = /^(?!.*\.\.)(?!\.)[A-Za-z0-9._]{2,24}(?<!\.)$/;
+
+          // Преобразование username в строчные буквы
+          const username = usernameInput.value.toLowerCase();
+          usernameInput.value = username;
+
+          if (!usernameRegex.test(username)) {
+            event.preventDefault();
+            errorMessage.textContent = "Неправильный формат TikTok username!";
+          } else {
+            errorMessage.textContent = "";
+          }
+        });
+    </script>
+  </body>
+</html>

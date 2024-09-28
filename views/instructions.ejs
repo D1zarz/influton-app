@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <title>Добро пожаловать в INFLOTON</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Сброс стилей */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      /* Основные стили для страницы */
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: #1a1a2e; /* Фон из первой страницы */
+        font-family: "Roboto", sans-serif;
+        color: #ffffff;
+        overflow: hidden;
+        position: relative;
+        text-align: center; /* Центрирование текста */
+      }
+
+      /* Фон с анимацией */
+      .background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.1),
+          rgba(0, 0, 0, 0.8)
+        );
+        animation: move 10s infinite linear;
+        z-index: -1;
+      }
+
+      @keyframes move {
+        0% {
+          background-position: 0% 0%;
+        }
+        100% {
+          background-position: 100% 100%;
+        }
+      }
+
+      /* Контейнер */
+      .container {
+        position: relative;
+        z-index: 2;
+        max-width: 400px;
+        width: 100%;
+        padding: 40px;
+        text-align: center;
+        overflow: hidden;
+      }
+
+      /* Заголовок */
+      h1 {
+        font-size: 40px; /* Размер шрифта из первой страницы */
+        margin: 20px 0;
+        color: #ffffff;
+        opacity: 0;
+        transform: translateY(-30px);
+        animation: fadeIn 0.8s forwards;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: bold;
+      }
+
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Обычный текст */
+      p {
+        font-size: 18px;
+        margin-bottom: 20px;
+        color: rgba(255, 255, 255, 0.85);
+        line-height: 1.7;
+      }
+
+      /* Эффект радуги для текста INFLOTON */
+      .rainbow-text {
+        background: linear-gradient(
+          45deg,
+          #ff0000,
+          #ff7f00,
+          #ffff00,
+          #00ff00,
+          #0000ff,
+          #4b0082,
+          #8b00ff
+        );
+        background-size: 400%;
+        -webkit-background-clip: text;
+        color: transparent;
+        animation: rainbow 3s ease-in-out infinite;
+      }
+
+      @keyframes rainbow {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      /* Выделение слова TikTok */
+      .highlight-text {
+        color: #1da1f2;
+        text-shadow:
+          0 0 10px rgba(29, 161, 242, 0.8),
+          0 0 20px rgba(29, 161, 242, 0.8),
+          0 0 30px rgba(29, 161, 242, 0.8);
+        animation: glow 2s ease-in-out infinite alternate;
+      }
+
+      @keyframes glow {
+        from {
+          text-shadow:
+            0 0 10px rgba(29, 161, 242, 0.8),
+            0 0 20px rgba(29, 161, 242, 0.8),
+            0 0 30px rgba(29, 161, 242, 0.8);
+        }
+        to {
+          text-shadow:
+            0 0 20px rgba(29, 161, 242, 1),
+            0 0 30px rgba(29, 161, 242, 1),
+            0 0 40px rgba(29, 161, 242, 1);
+        }
+      }
+
+      /* Слайдер изображений */
+      .image-slider {
+        position: relative;
+        width: 100%;
+        height: auto;
+        margin-bottom: 20px;
+        border-radius: 16px;
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      .image-slider img {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+        display: none;
+      }
+
+      .image-slider img.active {
+        display: block;
+      }
+
+      /* Кнопка подтверждения */
+      .button {
+        background: linear-gradient(to right, #ff4081, #00b0ff);
+        color: white;
+        padding: 15px 30px;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        font-size: 20px;
+        margin: 20px 0;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        animation: pulse 1s infinite;
+        text-decoration: none;
+        display: inline-block;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+
+      .button:hover {
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+      }
+
+      .button:active {
+        transform: scale(0.95);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="background"></div>
+    <div class="container">
+      <h1>Добро пожаловать в <span class="rainbow-text">INFLSTAR</span></h1>
+      <p>
+        Зарабатывайте <span class="rainbow-text">INFLUSTAR</span> монеты прямо
+        сейчас, подтвердив свой
+        <span class="highlight-text">TikTok</span> аккаунт!
+      </p>
+      <p>
+        Количество монет зависит от качества вашего аккаунта. Впишите
+        <span class="rainbow-text">INFLUSTAR</span> в описание профиля, чтобы
+        начать!
+      </p>
+
+      <!-- Слайдер изображений -->
+      <div class="image-slider">
+        <img src="1.png" class="active" alt="Image 1" />
+        <img src="2.png" alt="Image 2" />
+        <img src="3.png" alt="Image 3" />
+      </div>
+
+      <a href="/verify" class="button">Готово</a>
+    </div>
+
+    <script>
+      // Отправляем данные на бэкэнд
+
+      document.getElementById("buttton").addEventListener("click", function () {
+        window.location.href = "/verify";
+      });
+
+      // Скрипт для смены изображений
+      let currentImageIndex = 0;
+      const images = document.querySelectorAll(".image-slider img");
+      const totalImages = images.length;
+
+      // Функция для смены изображений с интервалом в 3 секунды
+      setInterval(() => {
+        images[currentImageIndex].classList.remove("active");
+        currentImageIndex = (currentImageIndex + 1) % totalImages;
+        images[currentImageIndex].classList.add("active");
+      }, 3000);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Результаты верификации</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Ваши существующие стили */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Roboto", sans-serif;
+        background: #1a1a2e;
+        color: #ffffff;
+        overflow: hidden;
+        position: relative;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+
+      .background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.1),
+          rgba(0, 0, 0, 0.8)
+        );
+        z-index: -1;
+      }
+
+      .avatar-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 20px;
+        opacity: 0;
+        animation: fadeIn 1s forwards 1s;
+        position: relative; /* Добавлено для позиционирования */
+      }
+
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
+        }
+      }
+
+      .avatar {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        position: absolute;
+        z-index: 2; /* Изменено с 1 на 2 для правильного слоя */
+      }
+
+      .loader {
+        border: 8px solid rgba(255, 255, 255, 0.3);
+        border-top: 8px solid #ff4081;
+        border-radius: 50%;
+        width: 120px;
+        height: 120px;
+        animation: spin 1.5s linear infinite;
+        margin-top: 0;
+        position: absolute; /* Добавлено для позиционирования */
+        z-index: 1; /* Колесо под аватаркой */
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .username,
+      .userId {
+        opacity: 0;
+        animation: fadeIn 1s forwards;
+        margin-top: 20px;
+      }
+
+      .username {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        animation-delay: 2s;
+      }
+
+      .userId {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        animation-delay: 2s;
+      }
+
+      .emoji-stats {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+        opacity: 0;
+        animation: fadeIn 1s forwards;
+        animation-delay: 3s;
+      }
+
+      .emoji-stats p {
+        margin: 0 15px;
+        font-size: 18px;
+        color: rgba(255, 255, 255, 0.85);
+        opacity: 1;
+        animation: none;
+      }
+
+      .container {
+        max-width: 600px;
+        width: 90%;
+        padding: 40px;
+        text-align: center;
+        z-index: 2;
+        opacity: 0;
+        animation: fadeIn 1s forwards;
+        animation-delay: 4s;
+        position: relative;
+      }
+
+      .container p {
+        margin: 10px 0;
+        font-size: 18px;
+        color: rgba(255, 255, 255, 0.85);
+        opacity: 1;
+        animation: none;
+      }
+
+      a {
+        display: inline-block;
+        padding: 15px 30px;
+        background: linear-gradient(to right, #ff4081, #00b0ff);
+        color: #ffffff;
+        border-radius: 30px;
+        font-weight: bold;
+        text-transform: uppercase;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        margin-top: 20px;
+        opacity: 0;
+        animation: fadeIn 1s forwards;
+        animation-delay: 6s;
+      }
+
+      a:hover {
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+      }
+
+      /* Стили для Canvas */
+      #explosionCanvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        z-index: 10;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="background"></div>
+
+    <div class="avatar-container">
+      <div class="loader"></div>
+      <img src="<%= avatar %>" alt="Avatar" class="avatar" />
+    </div>
+
+    <div class="username"><strong></strong> <%= username %></div>
+    <div class="userId"><strong></strong> <%= id %></div>
+
+    <!-- Блок с эмоджи -->
+    <div class="emoji-stats">
+      <p class="followers"><strong>👨</strong> <%= followerCount %></p>
+      <p class="hearts"><strong>❤️</strong> <%= heartCount %></p>
+      <p class="videos"><strong>▶️</strong> <%= videoCount %></p>
+    </div>
+
+    <div class="container">
+      <p id="trustcoin-result">
+        <strong>WOW! influStar:</strong> <br /><%= cointrust %>
+      </p>
+      <a href="/play?username=<%= username %>&cointrust=<%= cointrust %>"
+        >Перейти к игре</a
+      >
+    </div>
+
+    <!-- Canvas для эффекта взрыва -->
+    <canvas id="explosionCanvas" width="800" height="600"></canvas>
+
+    <script>
+      // Показать аватарку и колёсико загрузки через 1 секунду
+      setTimeout(() => {
+        document.querySelector(".avatar-container").style.display = "flex";
+      }, 1000);
+
+      // Эффект взрыва при появлении Trustcoin результата
+      setTimeout(() => {
+        const canvas = document.getElementById("explosionCanvas");
+        const ctx = canvas.getContext("2d");
+        const particles = [];
+        const particleCount = 100;
+        const colors = ["#FF4081", "#00B0FF", "#FFFFFF", "#FFD700"];
+
+        // Установить размеры Canvas по размеру окна
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // Позиция элемента "Ваш баланс Trustcoin"
+        const trustcoinElement = document.getElementById("trustcoin-result");
+        const rect = trustcoinElement.getBoundingClientRect();
+        const originX = rect.left + rect.width / 2;
+        const originY = rect.top + rect.height / 2;
+
+        // Смещение для корректного отображения на Canvas
+        const canvasX = originX;
+        const canvasY = originY;
+
+        // Создание частиц
+        for (let i = 0; i < particleCount; i++) {
+          particles.push({
+            x: canvasX,
+            y: canvasY,
+            velocityX: (Math.random() - 0.5) * 10,
+            velocityY: (Math.random() - 0.5) * 10,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            size: Math.random() * 5 + 2,
+            life: 100,
+          });
+        }
+
+        // Анимация частиц
+        function animate() {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          particles.forEach((particle, index) => {
+            particle.x += particle.velocityX;
+            particle.y += particle.velocityY;
+            particle.life--;
+
+            ctx.fillStyle = particle.color;
+            ctx.beginPath();
+            ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+            ctx.fill();
+
+            if (particle.life <= 0) {
+              particles.splice(index, 1);
+            }
+          });
+
+          if (particles.length > 0) {
+            requestAnimationFrame(animate);
+          } else {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // После завершения анимации скрыть колесо загрузки
+            const loader = document.querySelector(".loader");
+            if (loader) {
+              loader.style.opacity = 1;
+              const fadeOut = setInterval(() => {
+                if (loader.style.opacity > 0) {
+                  loader.style.opacity -= 0.05;
+                } else {
+                  clearInterval(fadeOut);
+                  loader.style.display = "none";
+                }
+              }, 50);
+            }
+          }
+        }
+
+        animate();
+      }, 5000); // Задержка в 5 секунд для синхронизации с появлением элемента
+    </script>
+  </body>
+</html>

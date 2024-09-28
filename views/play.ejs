@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Игровая Страница</title>
+    <!-- Подключение шрифтов -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Подключение шрифта Roboto -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Сброс стилей */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      /* Основные стили для страницы */
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Roboto", sans-serif;
+        text-align: center;
+        overflow: hidden; /* Запретить прокрутку */
+        background: #1a1a2e; /* Основной цвет фона */
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+
+      /* Фон с анимацией */
+      .background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.1),
+          rgba(0, 0, 0, 0.8)
+        );
+        animation: move 10s infinite linear;
+        z-index: -1;
+      }
+
+      @keyframes move {
+        0% {
+          background-position: 0% 0%;
+        }
+        100% {
+          background-position: 100% 100%;
+        }
+      }
+
+      /* Имя пользователя и баланс в верхнем левом углу */
+      .username {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        font-size: 16px;
+        color: yellow;
+        z-index: 2;
+        text-align: left;
+      }
+
+      /* Отдельные стили для имени пользователя и баланса */
+      .user-name {
+        font-weight: bold;
+      }
+
+      .user-balance {
+        font-size: 18px; /* Увеличенный размер шрифта */
+        color: #7cfc00;
+        font-weight: bold;
+      }
+
+      /* Иконка кошелька в верхнем правом углу */
+      .wallet-icon {
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        width: 30px; /* Установите нужный размер */
+        height: auto;
+        z-index: 2;
+      }
+
+      /* Контейнер */
+      .container {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        padding: 20px 0;
+      }
+
+      /* Блок для изображения, таймера и кнопки */
+      .content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      /* Стиль для надписи SPEED */
+      .speed-text {
+        color: white;
+        font-size: 20px;
+        margin-bottom: 10px;
+        font-weight: bold;
+      }
+
+      /* Стиль для изображения с эффектом пульсации */
+      .coins-image {
+        width: 50%;
+        height: auto;
+        animation: pulseEffect 2s infinite;
+        position: relative;
+        margin-bottom: 30px; /* Увеличенный отступ снизу */
+      }
+
+      @keyframes pulseEffect {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      /* Стили для эмодзи */
+      .emoji {
+        position: absolute;
+        font-size: 24px;
+        opacity: 0;
+        animation: flyOut 2s forwards;
+        pointer-events: none;
+      }
+
+      @keyframes flyOut {
+        0% {
+          transform: translate(0, 0) scale(1);
+          opacity: 1;
+        }
+        100% {
+          transform: translate(var(--dx), var(--dy)) scale(0.5);
+          opacity: 0;
+        }
+      }
+
+      /* Стили для таймера */
+      .timer {
+        width: 60%;
+        color: white;
+        font-size: 24px;
+        margin: 10px auto;
+        text-align: center;
+        position: relative;
+        font-family: "Press Start 2P", cursive;
+      }
+
+      /* Стили для текста под таймером */
+      .timer-text {
+        color: red; /* Красный цвет текста */
+        font-size: 14px;
+        margin-top: 10px;
+        text-align: center;
+        width: 80%;
+        font-weight: bold; /* Жирный шрифт */
+      }
+
+      /* Стили для эффекта переливания */
+      .flow-effect {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 24px;
+        color: white;
+        animation: flowToBalance 1s forwards;
+      }
+
+      @keyframes flowToBalance {
+        0% {
+          opacity: 1;
+          top: 0;
+          transform: translateX(-50%) translateY(0);
+        }
+        100% {
+          opacity: 0;
+          top: -100px;
+          transform: translateX(-50%) translateY(-150px);
+        }
+      }
+
+      /* Стили для анимации монеток */
+      .coin-animation {
+        position: absolute;
+        font-size: 24px;
+        z-index: 1000;
+        transition:
+          transform 1s ease-in-out,
+          opacity 1s;
+        will-change: transform;
+      }
+
+      /* Стили кнопки */
+      .button {
+        background: linear-gradient(to right, #ff4081, #00b0ff);
+        color: white;
+        padding: 15px 30px;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        font-size: 20px;
+        margin-top: 30px; /* Уменьшенный отступ сверху */
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        text-decoration: none;
+        display: inline-block;
+        outline: none; /* Убираем обводку при фокусе */
+        user-select: none; /* Запрещаем выделение текста */
+      }
+
+      .button:hover {
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+      }
+
+      .button:active {
+        transform: scale(0.95);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      }
+
+      .button:focus {
+        outline: none; /* Убираем обводку при фокусе */
+      }
+
+      /* Стили для кнопки меню */
+      .menu-button {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 40px;
+        height: 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        z-index: 3;
+      }
+
+      .menu-line {
+        width: 30px; /* Увеличиваем ширину для горизонтальных линий */
+        height: 4px; /* Уменьшаем высоту для тонкости линий */
+        background-color: white;
+        border-radius: 2px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Фон с анимацией -->
+    <div class="background"></div>
+
+    <!-- Имя пользователя и баланс в верхнем левом углу -->
+    <div class="username">
+      <div class="user-name"><%= username %></div>
+      <div class="user-balance" id="balance">🪙 <%= cointrust %> coins</div>
+    </div>
+
+    <!-- Иконка кошелька в верхнем правом углу -->
+    <img src="wallet.png" alt="Wallet" class="wallet-icon" />
+
+    <div class="container">
+      <!-- Блок с изображением, таймером и кнопкой -->
+      <div class="content">
+        <!-- Надпись SPEED: x1 над изображением -->
+        <div class="speed-text">SPEED: x1</div>
+
+        <img src="coins.png" alt="Coins" class="coins-image" id="coinsImage" />
+
+        <!-- Таймер без эмодзи -->
+        <div class="timer" id="timer">0.0001</div>
+
+        <!-- Текст под таймером -->
+        <div class="timer-text">
+          Забирай монеты каждые 24 часа или они сгорают
+        </div>
+
+        <!-- Кнопка "ЗАБРАТЬ" ближе к тексту -->
+        <a href="#" class="button" id="collectButton">ЗАБРАТЬ</a>
+      </div>
+    </div>
+
+    <!-- Кнопка меню внизу по центру экрана -->
+    <div class="menu-button">
+      <div class="menu-line"></div>
+      <div class="menu-line"></div>
+      <div class="menu-line"></div>
+    </div>
+
+    <script>
+      // Эмодзи для вылета
+      const emojis = ["❤️", "👍", "💬"];
+
+      // Функция запуска эмодзи
+      function launchEmojis() {
+        const image = document.getElementById("coinsImage");
+        const rect = image.getBoundingClientRect();
+        const imageCenterX = rect.left + rect.width / 2;
+        const imageCenterY = rect.top + rect.height / 2;
+
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+
+        emojis.forEach((emoji) => {
+          const emojiEl = document.createElement("div");
+          emojiEl.classList.add("emoji");
+          emojiEl.textContent = emoji;
+
+          // Устанавливаем начальную позицию в центре изображения
+          emojiEl.style.left = imageCenterX + "px";
+          emojiEl.style.top = imageCenterY + "px";
+
+          // Вычисляем максимальные смещения, чтобы эмодзи не выходили за границы экрана
+          const maxOffsetX = Math.min(
+            imageCenterX - 20,
+            viewportWidth - imageCenterX - 20
+          );
+          const maxOffsetY = imageCenterY - 20; // Эмодзи будут лететь только вверх
+
+          // Генерируем случайное смещение
+          const dx = (Math.random() - 0.5) * 2 * maxOffsetX;
+          const dy = -Math.random() * maxOffsetY;
+
+          // Устанавливаем CSS-переменные для анимации
+          emojiEl.style.setProperty("--dx", dx + "px");
+          emojiEl.style.setProperty("--dy", dy + "px");
+
+          document.body.appendChild(emojiEl);
+
+          // Удаляем эмодзи после окончания анимации
+          emojiEl.addEventListener("animationend", () => {
+            emojiEl.remove();
+          });
+        });
+      }
+
+      // Запускаем эмодзи каждые 2 секунды
+      setInterval(launchEmojis, 2000);
+
+      // Таймер
+      let timerValue = 0.0001;
+
+      function updateTimer() {
+        // Прибавляем 0.0001 к текущему значению
+        timerValue += 0.0001;
+        // Ограничиваем количество знаков после запятой
+        timerValue = parseFloat(timerValue.toFixed(4));
+        // Обновляем отображение таймера
+        document.getElementById("timer").textContent = timerValue.toFixed(4);
+      }
+
+      // Запускаем таймер, обновляя каждые 500 миллисекунд
+      let timerInterval = setInterval(updateTimer, 500);
+
+      // Обработка нажатия кнопки "ЗАБРАТЬ"
+      document
+        .getElementById("collectButton")
+        .addEventListener("click", function (event) {
+          event.preventDefault(); // Предотвращаем переход по ссылке
+
+          // Получаем текущий баланс из отображения
+          const balanceElement = document.getElementById("balance");
+          let balanceText = balanceElement.textContent;
+          let balanceMatch = balanceText.match(/🪙 ([\d\.]+) coins/);
+          let currentBalance = balanceMatch ? parseFloat(balanceMatch[1]) : 0;
+
+          // Добавляем значение таймера к балансу
+          currentBalance += timerValue;
+          currentBalance = parseFloat(currentBalance.toFixed(4));
+
+          // Обновляем отображение баланса
+          balanceElement.textContent = `🪙 ${currentBalance.toFixed(4)} coins`;
+
+          // Создаём эффект переливания
+          const timerElement = document.getElementById("timer");
+          const flowEffect = document.createElement("div");
+          flowEffect.className = "flow-effect";
+          flowEffect.textContent = `+${timerValue.toFixed(4)}`;
+          timerElement.appendChild(flowEffect);
+
+          // Удаляем эффект после окончания анимации
+          flowEffect.addEventListener("animationend", () => {
+            flowEffect.remove();
+          });
+
+          // Сбрасываем таймер
+          timerValue = 0.0001;
+          document.getElementById("timer").textContent = timerValue.toFixed(4);
+
+          // Эффект летящих монеток к балансу
+          const timerRect = timerElement.getBoundingClientRect();
+          const balanceRect = balanceElement.getBoundingClientRect();
+
+          // Количество монеток
+          const numCoins = 5;
+
+          for (let i = 0; i < numCoins; i++) {
+            const coin = document.createElement("div");
+            coin.className = "coin-animation";
+            coin.textContent = "🪙";
+
+            // Начальная позиция (над таймером)
+            const offsetX = (Math.random() - 0.5) * 20; // Случайное смещение по X
+            const offsetY = (Math.random() - 0.5) * 20; // Случайное смещение по Y
+
+            coin.style.left =
+              timerRect.left + timerRect.width / 2 + offsetX + "px";
+            coin.style.top =
+              timerRect.top + timerRect.height / 2 + offsetY + "px";
+
+            document.body.appendChild(coin);
+
+            // Принудительный reflow
+            coin.offsetWidth;
+
+            // Конечная позиция (над балансом)
+            const deltaX =
+              balanceRect.left +
+              balanceRect.width / 2 -
+              (timerRect.left + timerRect.width / 2 + offsetX);
+            const deltaY =
+              balanceRect.top +
+              balanceRect.height / 2 -
+              (timerRect.top + timerRect.height / 2 + offsetY);
+
+            // Анимация
+            coin.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+            coin.style.opacity = "0";
+
+            // Удаляем монетку после окончания анимации
+            coin.addEventListener("transitionend", () => {
+              coin.remove();
+            });
+          }
+
+          // Если нужно перезапустить таймер (он уже запущен, поэтому ничего не делаем)
+        });
+    </script>
+  </body>
+</html>
