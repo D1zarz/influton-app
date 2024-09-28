@@ -17,9 +17,13 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req, res) => {
   const telegramData = req.body;
-  const { usernameTg, id } = verifyInitData(telegramData.initData);
+  const { usernameTg, id, language_code } = verifyInitData(
+    telegramData.initData
+  );
+  req.session.buttonDisabled = true;
   req.session.userId = id;
   req.session.usernameTg = usernameTg;
+  req.session.language_code = language_code;
   //const { username, cointrust } = await userService.getTikTok(id);
   const user = await userService.getUser(id);
 

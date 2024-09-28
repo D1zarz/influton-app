@@ -24,6 +24,7 @@ router.post("/verify", async (req, res) => {
   const { username } = req.body;
   const usernameTg = req.session.usernameTg;
   const userId = req.session.userId;
+  const language_code = req.session.language_code;
   // Проверка правильности никнейма
   if (!isValidUsername(username)) {
     return res.render("error", {
@@ -70,8 +71,16 @@ router.post("/verify", async (req, res) => {
           ttName: username,
           cointrust: cointrust,
           trustScore: trustScore,
+          language_code: language_code,
         });
-        return res.render("result", { username, cointrust, avatarThumb });
+        return res.render("result", {
+          username,
+          cointrust,
+          avatarThumb,
+          followerCount,
+          heartCount,
+          videoCount,
+        });
       } else {
         return res.render("error", {
           message: `Описание вашего профиля не содержит слово "${verificationWord}".`,
