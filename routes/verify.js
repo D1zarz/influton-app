@@ -47,7 +47,7 @@ router.post("/verify", async (req, res) => {
     const { data } = response;
     if (data && data.stats && data.user) {
       const { followerCount, heartCount, videoCount } = data.stats;
-      const { signature, id } = data.user;
+      const { signature, id, avatarThumb } = data.user;
 
       // Проверка, содержит ли описание слово
       if (
@@ -71,7 +71,7 @@ router.post("/verify", async (req, res) => {
           cointrust: cointrust,
           trustScore: trustScore,
         });
-        return res.render("result", { username, cointrust });
+        return res.render("result", { username, cointrust, avatarThumb });
       } else {
         return res.render("error", {
           message: `Описание вашего профиля не содержит слово "${verificationWord}".`,

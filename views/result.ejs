@@ -4,12 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Результаты верификации</title>
+    <!-- Подключение пиксельного шрифта -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
       rel="stylesheet"
     />
     <style>
-      /* Ваши существующие стили */
+      /* Сброс стилей и базовые настройки */
       * {
         margin: 0;
         padding: 0;
@@ -23,11 +24,10 @@
         overflow: hidden;
         position: relative;
         text-align: center;
+        min-height: 100vh;
         display: flex;
-        flex-direction: column;
         justify-content: center;
         align-items: center;
-        min-height: 100vh;
       }
 
       .background {
@@ -44,14 +44,33 @@
         z-index: -1;
       }
 
-      .avatar-container {
+      .content {
         display: flex;
+        flex-direction: column;
         align-items: center;
-        justify-content: center;
-        margin-top: 20px;
+        width: 100%;
+        max-width: 400px;
+        padding: 20px;
+      }
+
+      /* Стиль для никнейма */
+      .username {
+        font-family: "Press Start 2P", cursive;
+        font-size: 24px;
+        color: #ffffff;
+        margin-bottom: 20px;
+        opacity: 0;
+        animation: fadeIn 1s forwards;
+        animation-delay: 1s;
+      }
+
+      .avatar-container {
+        position: relative;
+        width: 150px;
+        height: 150px;
         opacity: 0;
         animation: fadeIn 1s forwards 1s;
-        position: relative; /* Добавлено для позиционирования */
+        margin-bottom: 20px;
       }
 
       @keyframes fadeIn {
@@ -60,24 +79,28 @@
         }
       }
 
-      .avatar {
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
+      .loader {
         position: absolute;
-        z-index: 2; /* Изменено с 1 на 2 для правильного слоя */
+        top: 0;
+        left: 0;
+        width: 150px;
+        height: 150px;
+        border: 10px solid rgba(255, 255, 255, 0.3);
+        border-top: 10px solid #ff4081;
+        border-radius: 50%;
+        animation: spin 1.5s linear infinite;
+        z-index: 1;
       }
 
-      .loader {
-        border: 8px solid rgba(255, 255, 255, 0.3);
-        border-top: 8px solid #ff4081;
+      .avatar {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 130px;
+        height: 130px;
+        transform: translate(-50%, -50%);
         border-radius: 50%;
-        width: 120px;
-        height: 120px;
-        animation: spin 1.5s linear infinite;
-        margin-top: 0;
-        position: absolute; /* Добавлено для позиционирования */
-        z-index: 1; /* Колесо под аватаркой */
+        z-index: 2;
       }
 
       @keyframes spin {
@@ -89,63 +112,39 @@
         }
       }
 
-      .username,
-      .userId {
-        opacity: 0;
-        animation: fadeIn 1s forwards;
-        margin-top: 20px;
-      }
-
-      .username {
-        position: absolute;
-        top: 20px;
-        left: 20px;
-        animation-delay: 2s;
-      }
-
-      .userId {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        animation-delay: 2s;
-      }
-
+      /* Блок с эмоджи */
       .emoji-stats {
         display: flex;
         justify-content: center;
         align-items: center;
         margin-top: 20px;
+        margin-bottom: 20px;
         opacity: 0;
         animation: fadeIn 1s forwards;
-        animation-delay: 3s;
+        animation-delay: 2s;
       }
 
       .emoji-stats p {
         margin: 0 15px;
         font-size: 18px;
         color: rgba(255, 255, 255, 0.85);
-        opacity: 1;
-        animation: none;
       }
 
       .container {
-        max-width: 600px;
-        width: 90%;
-        padding: 40px;
-        text-align: center;
-        z-index: 2;
         opacity: 0;
         animation: fadeIn 1s forwards;
-        animation-delay: 4s;
-        position: relative;
+        animation-delay: 3s;
       }
 
-      .container p {
+      #trustcoin-result {
+        font-size: 20px;
         margin: 10px 0;
-        font-size: 18px;
-        color: rgba(255, 255, 255, 0.85);
-        opacity: 1;
-        animation: none;
+      }
+
+      #trustcoin-result .influStar-result-number {
+        font-weight: bold;
+        color: #32cd32;
+        font-size: 36px;
       }
 
       a {
@@ -162,14 +161,15 @@
         margin-top: 20px;
         opacity: 0;
         animation: fadeIn 1s forwards;
-        animation-delay: 6s;
+        animation-delay: 4s;
+        font-size: 16px;
       }
 
       a:hover {
         box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
       }
 
-      /* Стили для Canvas */
+      /* Canvas для эффекта взрыва */
       #explosionCanvas {
         position: absolute;
         top: 0;
@@ -177,42 +177,86 @@
         pointer-events: none;
         z-index: 10;
       }
+
+      /* Медиа-запросы для маленьких экранов */
+      @media (max-height: 700px) {
+        .content {
+          padding: 10px;
+        }
+
+        .avatar-container {
+          width: 120px;
+          height: 120px;
+          margin-bottom: 15px;
+        }
+
+        .loader {
+          width: 120px;
+          height: 120px;
+        }
+
+        .avatar {
+          width: 100px;
+          height: 100px;
+        }
+
+        .username {
+          font-size: 18px;
+          margin-bottom: 15px;
+        }
+
+        .emoji-stats p {
+          font-size: 16px;
+        }
+
+        #trustcoin-result {
+          font-size: 18px;
+        }
+
+        #trustcoin-result .influStar-result-number {
+          font-size: 28px;
+        }
+
+        a {
+          padding: 12px 24px;
+          font-size: 14px;
+        }
+      }
     </style>
   </head>
   <body>
     <div class="background"></div>
 
-    <div class="avatar-container">
-      <div class="loader"></div>
-      <img src="<%= avatar %>" alt="Avatar" class="avatar" />
-    </div>
+    <div class="content">
+      <!-- Никнейм пользователя по центру -->
+      <div class="username"><%= username %></div>
 
-    <div class="username"><strong></strong> <%= username %></div>
-    <div class="userId"><strong></strong> <%= id %></div>
+      <div class="avatar-container">
+        <div class="loader"></div>
+        <img src="<%= avatarThumb %>" alt="Avatar" class="avatar" />
+      </div>
 
-    <!-- Блок с эмоджи -->
-    <div class="emoji-stats">
-      <p class="followers"><strong>👨</strong> <%= followerCount %></p>
-      <p class="hearts"><strong>❤️</strong> <%= heartCount %></p>
-      <p class="videos"><strong>▶️</strong> <%= videoCount %></p>
-    </div>
-
-    <div class="container">
-      <p id="trustcoin-result">
-        <strong>WOW! influStar:</strong> <br /><%= cointrust %>
-      </p>
-      <a href="/play?username=<%= username %>&cointrust=<%= cointrust %>"
-        >Перейти к игре</a
-      >
+      <div class="container">
+        <p id="trustcoin-result">
+          <strong
+            >WOW! <br />
+            influStar Coins</strong
+          >
+          <br /><span class="influStar-result-number"><%= cointrust %></span>
+        </p>
+        <a href="/play?username=<%= username %>&cointrust=<%= cointrust %>"
+          >НАЧАТЬ</a
+        >
+      </div>
     </div>
 
     <!-- Canvas для эффекта взрыва -->
-    <canvas id="explosionCanvas" width="800" height="600"></canvas>
+    <canvas id="explosionCanvas"></canvas>
 
     <script>
       // Показать аватарку и колёсико загрузки через 1 секунду
       setTimeout(() => {
-        document.querySelector(".avatar-container").style.display = "flex";
+        document.querySelector(".avatar-container").style.display = "block";
       }, 1000);
 
       // Эффект взрыва при появлении Trustcoin результата
@@ -227,7 +271,7 @@
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
-        // Позиция элемента "Ваш баланс Trustcoin"
+        // Позиция элемента "WOW! influStar:"
         const trustcoinElement = document.getElementById("trustcoin-result");
         const rect = trustcoinElement.getBoundingClientRect();
         const originX = rect.left + rect.width / 2;
@@ -289,7 +333,7 @@
         }
 
         animate();
-      }, 5000); // Задержка в 5 секунд для синхронизации с появлением элемента
+      }, 4000); // Задержка в 4 секунды для синхронизации с появлением элемента
     </script>
   </body>
 </html>
