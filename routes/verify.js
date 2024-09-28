@@ -64,8 +64,8 @@ router.post("/verify", async (req, res) => {
 
         // Отправка результатов пользователю
         await UserService.createUser({
-          tgName: usernameTg,
           _id: userId,
+          tgName: usernameTg,
           ttId: id,
           ttName: username,
           cointrust: cointrust,
