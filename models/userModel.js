@@ -7,6 +7,11 @@ const UserSchema = mongoose.Schema({
   ttName: { type: String },
   cointrust: { type: Number },
   trustScore: { type: Number },
+  language_code: { type: String },
+  register_date: { type: Date, default: Date.now },
+  last_login: {
+    type: Date,
+  },
   tasks: [
     {
       id: { type: String, ref: "Task" },
