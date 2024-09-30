@@ -20,18 +20,21 @@ router.post("/", async (req, res) => {
   const { usernameTg, id, language_code } = verifyInitData(
     telegramData.initData
   );
-  req.session.buttonDisabled = true;
-  req.session.userId = id;
-  req.session.usernameTg = usernameTg;
-  req.session.language_code = language_code;
-  //const { username, cointrust } = await userService.getTikTok(id);
-  const user = await userService.getUser(id);
 
-  if (!user) {
+  try {
+    await userService.createUser({
+      _id: id,
+      tgName: usernameTg,
+      language_code: language_code,
+    });
+    req.session.buttonDisabled = true;
+    req.session.userId = id;
+    req.session.usernameTg = usernameTg;
+    req.session.language_code = language_code;
+    return res.send("truth");
+  } catch (err) {
     return res.send("error");
   }
-
-  return res.send("truth");
 });
 
 module.exports = router;

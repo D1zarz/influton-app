@@ -22,9 +22,8 @@ router.get("/verify", (req, res) => {
 
 router.post("/verify", async (req, res) => {
   const { username } = req.body;
-  const usernameTg = req.session.usernameTg;
   const userId = req.session.userId;
-  const language_code = req.session.language_code;
+
   // Проверка правильности никнейма
   if (!isValidUsername(username)) {
     return res.render("error", {
@@ -62,17 +61,17 @@ router.post("/verify", async (req, res) => {
           videoCount
         );
         const cointrust = (trustScore / 10).toFixed(4);
-
+        const user = await UserService.getUser(userId);
+        user.ttId = id;
+        user.ttName = username;
+        user.cointrust = cointrust;
+        user.trustScore = trustScore;
+        user.followerCount = followerCount;
+        user.videoCount = videoCount;
+        user.heartCount = heartCount;
         // Отправка результатов пользователю
-        await UserService.createUser({
-          _id: userId,
-          tgName: usernameTg,
-          ttId: id,
-          ttName: username,
-          cointrust: cointrust,
-          trustScore: trustScore,
-          language_code: language_code,
-        });
+        user.save();
+
         return res.render("result", {
           username,
           cointrust,

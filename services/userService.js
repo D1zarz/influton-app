@@ -16,6 +16,7 @@ class UserService {
     }
     return {
       username: user.ttName,
+      id: user.ttId,
       cointrust: user.cointrust,
     };
   }

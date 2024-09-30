@@ -8,6 +8,9 @@ const UserSchema = mongoose.Schema({
   cointrust: { type: Number },
   trustScore: { type: Number },
   language_code: { type: String },
+  followerCount: { type: Number },
+  heartCount: { type: Number },
+  videoCount: { type: Number },
   register_date: { type: Date, default: Date.now },
   last_login: {
     type: Date,
