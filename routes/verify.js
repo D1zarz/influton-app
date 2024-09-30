@@ -2,7 +2,7 @@ const express = require("express");
 const verifyInitData = require("./auth");
 const UserService = require("../services/userService");
 const axios = require("axios");
-let verificationWord = "INFLUTON"; // Слово для проверки, по умолчанию
+let verificationWord = "INFLUSTAR"; // Слово для проверки, по умолчанию
 
 const router = express.Router();
 
