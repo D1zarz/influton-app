@@ -62,24 +62,28 @@ router.post("/verify", async (req, res) => {
         );
         const cointrust = (trustScore / 10).toFixed(4);
         const user = await UserService.getUser(userId);
-        user.ttId = id;
-        user.ttName = username;
-        user.cointrust = cointrust;
-        user.trustScore = trustScore;
-        user.followerCount = followerCount;
-        user.videoCount = videoCount;
-        user.heartCount = heartCount;
-        // Отправка результатов пользователю
-        user.save();
+        if (user) {
+          user.ttId = id;
+          user.ttName = username;
+          user.cointrust = cointrust;
+          user.trustScore = trustScore;
+          user.followerCount = followerCount;
+          user.videoCount = videoCount;
+          user.heartCount = heartCount;
+          // Отправка результатов пользователю
+          user.save();
 
-        return res.render("result", {
-          username,
-          cointrust,
-          avatarThumb,
-          followerCount,
-          heartCount,
-          videoCount,
-        });
+          return res.render("result", {
+            username,
+            cointrust,
+            avatarThumb,
+            followerCount,
+            heartCount,
+            videoCount,
+          });
+        } else {
+          return res.render("error", { message: "Такого пользователя нет" });
+        }
       } else {
         return res.render("error", {
           message: `Описание вашего профиля не содержит слово "${verificationWord}".`,

@@ -12,7 +12,11 @@ router.get("/", async (req, res) => {
     return res.render("instructions");
   }
   const { username, cointrust } = await userService.getTikTok(id);
-  return res.render("play", { username, cointrust });
+  if (username) {
+    return res.render("play", { username, cointrust });
+  } else {
+    return res.render("error", { message: "Service error" });
+  }
 });
 
 router.post("/", async (req, res) => {
