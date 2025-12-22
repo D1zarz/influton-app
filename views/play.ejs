@@ -274,6 +274,34 @@
         background-color: white;
         border-radius: 2px;
       }
+
+      /* Стили для кнопки Колесо Фортуны */
+      .wheel-button {
+        position: fixed;
+        top: 20px;
+        right: 60px;
+        background: linear-gradient(135deg, #ffd700, #ff8c00);
+        color: #1a1a2e;
+        padding: 8px 16px;
+        border-radius: 20px;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: bold;
+        z-index: 100;
+        box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+        transition: all 0.3s ease;
+        animation: wheelPulse 2s infinite;
+      }
+
+      .wheel-button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 20px rgba(255, 215, 0, 0.6);
+      }
+
+      @keyframes wheelPulse {
+        0%, 100% { box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4); }
+        50% { box-shadow: 0 4px 25px rgba(255, 215, 0, 0.7); }
+      }
     </style>
   </head>
   <body>
@@ -288,6 +316,9 @@
 
     <!-- Иконка кошелька в верхнем правом углу -->
     <img src="wallet.png" alt="Wallet" class="wallet-icon" />
+
+    <!-- Кнопка Колесо Фортуны -->
+    <a href="/wheel?username=<%= username %>&userId=<%= username %>" class="wheel-button">🎰 Колесо</a>
 
     <div class="container">
       <!-- Блок с изображением, таймером и кнопкой -->
