@@ -8,6 +8,7 @@ const routerAuth = require("./routes/auth");
 const instructionsRouter = require("./routes/instructions");
 const playRouter = require("./routes/play");
 const verifyRouter = require("./routes/verify");
+const wheelRouter = require("./routes/wheel");
 const mongoose = require("mongoose");
 require("dotenv").config();
 app.use(bodyParser.json());
@@ -37,6 +38,7 @@ app.use("/", routerAuth);
 app.use("/", instructionsRouter);
 app.use("/", playRouter);
 app.use("/", verifyRouter);
+app.use("/", wheelRouter);
 
 // Главная страница, перенаправляющая на /splash
 // app.get("/", (req, res) => {
